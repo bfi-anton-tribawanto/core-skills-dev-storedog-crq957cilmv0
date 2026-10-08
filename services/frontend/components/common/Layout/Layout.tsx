@@ -92,63 +92,6 @@ const SidebarUI: React.FC<{}> = ({}) => {
   ) : null
 }
 
-/* ============================================================
-   [STAGING BANNER] - Fixed banner at top of page indicating staging environment.
-   This banner is added in Challenge 2 to visually distinguish the staging environment
-   from production. It is removed in Challenge 4. The banner stays fixed at the top
-   while scrolling, and injects a global style to offset the navbar's sticky position.
-   ============================================================ */
-const STAGING_BANNER_HEIGHT = '40px'
-
-const StagingBanner: React.FC = () => {
-  return (
-    <>
-      {/* Global style to offset the navbar's sticky top position below the fixed banner.
-          Targets the Navbar's root element (CSS Modules compiles to class containing "Navbar_root").
-          Also sets the navbar-wrapper to be sticky at the banner height. */}
-      <style jsx global>{`
-        .staging-banner-offset [class*="Navbar_root"] {
-          position: relative !important;
-          top: 0 !important;
-        }
-        .staging-navbar-wrapper {
-          position: sticky;
-          top: ${STAGING_BANNER_HEIGHT};
-          z-index: 40;
-        }
-        .staging-banner-fixed {
-          z-index: 45 !important;
-        }
-      `}</style>
-      <div
-        className="staging-banner-fixed"
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          backgroundColor: '#f59e0b',
-          color: '#1f2937',
-          textAlign: 'center',
-          padding: '8px 16px',
-          fontWeight: 'bold',
-          fontSize: '14px',
-          letterSpacing: '0.05em',
-          textTransform: 'uppercase',
-          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-          height: STAGING_BANNER_HEIGHT,
-          boxSizing: 'border-box',
-        }}
-      >
-        Staging Environment
-      </div>
-    </>
-  )
-}
-/* ============================================================
-   [END STAGING BANNER]
-   ============================================================ */
-
 const Layout: React.FC<Props> = ({ children, pageProps: { ...pageProps } }) => {
   const [pages, setPages] = useState<Page[]>([])
 
@@ -176,20 +119,8 @@ const Layout: React.FC<Props> = ({ children, pageProps: { ...pageProps } }) => {
   }
 
   return (
-    <div className={cn(s.root, 'staging-banner-offset')}>
-      {/* ============================================================
-          [STAGING BANNER] - Renders the fixed staging environment banner at the very top.
-          The staging-banner-offset class enables the global CSS that pushes the navbar down.
-          paddingTop ensures content isn't hidden behind the fixed banner.
-          ============================================================ */}
-      <StagingBanner />
-      <div style={{ paddingTop: STAGING_BANNER_HEIGHT }}>
-      {/* ============================================================
-          [END STAGING BANNER]
-          ============================================================ */}
-      <div className="staging-navbar-wrapper">
-        <Navbar />
-      </div>
+    <div className={cn(s.root)}>
+      <Navbar />
       {/* ============================================================
           [DISCOUNT BANNER] - Renders the purple discount code banner below the navbar.
           This fetches and displays promotional discount codes from the discounts service.
@@ -205,13 +136,6 @@ const Layout: React.FC<Props> = ({ children, pageProps: { ...pageProps } }) => {
       <CheckoutProvider>
         <SidebarUI />
       </CheckoutProvider>
-      {/* ============================================================
-          [STAGING BANNER] - Closing div for the paddingTop wrapper
-          ============================================================ */}
-      </div>
-      {/* ============================================================
-          [END STAGING BANNER]
-          ============================================================ */}
     </div>
   )
 }
